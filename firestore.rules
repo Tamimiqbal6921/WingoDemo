@@ -1,0 +1,8 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // All balance, bet, round, ledger and admin operations go through trusted
+    // Cloud Functions (Admin SDK). The browser cannot read or write these docs.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
