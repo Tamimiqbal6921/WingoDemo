@@ -1,194 +1,188 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Wingo Demo</title>
 <style>
+:root{--bg:#0c1019;--card:#191f2e;--line:#2b3347;--gold:#ffca55;--green:#16bb7e;--red:#f04d64;--violet:#9257f5;--muted:#9ba6bb}
 *{box-sizing:border-box}
-body{margin:0;background:#0c1220;color:#fff;font-family:Arial,sans-serif}
-header{padding:20px;text-align:center;background:#18243a}
-header h1{color:#43e6a4;margin:0}
-main{padding:15px;padding-bottom:100px;max-width:600px;margin:auto}
-.card{background:#18243a;padding:18px;margin:14px 0;border-radius:14px}
-.balance{text-align:center}
-.coins{font-size:30px;color:#43e6a4;font-weight:bold}
-button,input,select{padding:12px;border-radius:8px;border:0;margin:4px 0}
-button{cursor:pointer;background:#43e6a4;color:#07150f;font-weight:bold}
-input,select{max-width:100%;background:#fff;color:#111}
-button.secondary{background:#34445f;color:#fff}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#18243a;padding:10px 0}
-nav button{background:transparent;color:white;font-size:11px;padding:8px 4px}
+body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif;padding-bottom:78px}
+header{background:#171d2a;padding:16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.logo{font-size:22px;font-weight:900;color:var(--gold)}
+.tag{font-size:10px;background:#302943;color:#d7bfff;padding:7px;border-radius:20px}
+main{max-width:520px;margin:auto;padding:12px}
 .page{display:none}.page.active{display:block}
-.result{font-size:23px;font-weight:bold;margin:15px 0}
-small{color:#b9c6d9}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:13px}
+h2{font-size:18px;margin:0 0 14px}h3{font-size:14px;margin:14px 0 8px}
+.small{font-size:12px;color:var(--muted);line-height:1.6}
+.balance{font-size:30px;font-weight:bold;color:var(--gold);margin:9px 0 15px}
+.row{display:flex;gap:9px}.row>*{flex:1;min-width:0}
+button,input{font:inherit}button{border:0;border-radius:9px;padding:12px 8px;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.gold{background:var(--gold);color:#171717}.green{background:var(--green)}.red{background:var(--red)}.violet{background:var(--violet)}.dark{background:#30384d}.full{width:100%}
+.pill{flex:1;background:#252c3e;border-radius:10px;text-align:center;padding:11px 5px}
+.timer{font-size:27px;font-weight:bold;color:var(--gold);margin-top:5px}
+.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.num{padding:13px 4px;font-size:18px;border:2px solid transparent}
+.num.selected{border-color:white;box-shadow:0 0 10px #fff8}
+.colors{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.colorbtn{padding:14px 3px}
+input{display:block;width:100%;padding:12px;margin:8px 0 12px;background:#101522;color:white;border:1px solid #384158;border-radius:9px}
+.history{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.dot{display:inline-flex;width:29px;height:29px;border-radius:50%;justify-content:center;align-items:center;font-weight:bold}
+.nav{position:fixed;z-index:10;bottom:0;left:0;right:0;display:flex;background:#171d2a;border-top:1px solid var(--line);padding:8px 2px calc(8px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:transparent;color:#9ba6bb;font-size:11px;padding:7px 2px}
+.nav button span{display:block;font-size:19px;margin-bottom:4px}.nav button.active{color:var(--gold)}
+.notice{font-size:11px;color:var(--muted);line-height:1.6}
+.status{padding:10px;background:#252c3e;border-radius:9px;font-size:13px;margin-top:10px}
 </style>
 </head>
 <body>
-<header>
-<h1>WINGO DEMO</h1>
-<p>Virtual Coins Only · Demo Version</p>
-</header>
-
+<header><div class="logo">WINGO <span style="color:white">DEMO</span></div><div class="tag">VIRTUAL COINS ONLY</div></header>
 <main>
-<section id="Home" class="page active">
-<div class="card balance">
-<p>YOUR VIRTUAL BALANCE</p>
-<div class="coins" id="balance">1000</div>
-<p>Virtual Coins</p>
-<button onclick="claimBonus()">Claim 50 Bonus</button>
-</div>
-<div class="card">
-<h3>Wingo Demo Result</h3>
-<div class="result" id="result">Ready to play</div>
-<button onclick="generateResult()">Generate Result</button>
-</div>
-<div class="card">
-<h3>Recent Activity</h3>
-<div id="recent">No activity yet</div>
-</div>
+<section id="home" class="page active">
+ <div class="card"><div class="small">আমার ভার্চুয়াল ব্যালেন্স</div><div class="balance"><span id="balance">1000</span> <small>VC</small></div><div class="row"><button class="gold" onclick="showPage('wallet')">Wallet</button><button class="dark" onclick="showPage('promotion')">🎁 Bonus</button></div></div>
+ <div class="card"><h2>🎮 Wingo Number</h2><div class="row"><div class="pill"><div class="small">ROUND</div><b id="round">10001</b></div><div class="pill"><div class="small">TIME LEFT</div><div class="timer" id="timer">30</div></div></div><div class="status">শেষ ফলাফল: <b id="lastResult">এখনো নেই</b></div><button class="gold full" style="margin-top:13px" onclick="showPage('game')">PLAY NOW →</button></div>
+ <div class="card"><h2>সাম্প্রতিক ফলাফল</h2><div id="homeHistory"></div></div>
 </section>
-
-<section id="Activity" class="page">
-<div class="card"><h2>Activity</h2><div id="history">No activity yet</div></div>
+<section id="game" class="page">
+ <div class="card"><h2>🎯 Wingo — Demo Play</h2><div class="row"><div class="pill"><div class="small">ROUND</div><b id="gameRound">10001</b></div><div class="pill"><div class="small">TIME LEFT</div><div class="timer" id="gameTimer">30s</div></div></div>
+ <p class="small">নম্বর অথবা রং নির্বাচন করো। প্রতি রাউন্ডে একটি Bet করা যাবে।</p><h3>নম্বর নির্বাচন (0–9)</h3><div class="numbers" id="numbers"></div><h3>রং নির্বাচন</h3>
+ <div class="colors"><button class="colorbtn green" onclick="choose('color','Green')">GREEN</button><button class="colorbtn violet" onclick="choose('color','Violet')">VIOLET</button><button class="colorbtn red" onclick="choose('color','Red')">RED</button></div>
+ <div class="status" id="selection">কোনো নির্বাচন করা হয়নি</div><h3>Bet Amount (VC)</h3><input id="stake" type="number" min="1" max="1000" value="10"><button class="gold full" id="betButton" onclick="placeBet()">CONFIRM BET</button>
+ <p class="notice">শুধু ভার্চুয়াল কয়েন। সঠিক রং: Red/Green 2×, Violet 4.5×; সঠিক নম্বর 9× মোট রিটার্ন।</p><div class="status" id="betStatus">Bet করার জন্য নির্বাচন করো।</div></div>
+ <div class="card"><h2>গেম হিস্ট্রি</h2><div id="gameHistory"></div></div>
 </section>
-
-<section id="Promotion" class="page">
-<div class="card">
-<h2>Promotion</h2>
-<p>Demo referral bonus: 50 virtual coins.</p>
-<p><small>This is a local demo. No real referral tracking.</small></p>
-<button onclick="claimBonus()">Claim Demo Bonus</button>
-</div>
-</section>
-
-<section id="Wallet" class="page">
-<div class="card">
-<h2>Virtual Wallet</h2>
-<div class="coins" id="walletBalance">1000</div>
-<p>Virtual coins only. No deposits or withdrawals.</p>
-</div>
-</section>
-
-<section id="Account" class="page">
-<div class="card">
-<h2>Account</h2>
-<p>Demo Guest</p>
-<button onclick="showPage('Admin')">Open Demo Admin Panel</button>
-<p><small>Demo only: this panel has no real login protection.</small></p>
-</div>
-</section>
-
-<section id="Admin" class="page">
-<div class="card">
-<h2>Demo Admin Panel</h2>
-<p><small>Changes affect this browser only. Anyone using this demo can access this panel.</small></p>
-<label>Demo user name</label><br>
-<input id="userName" placeholder="Example: User 2"><br>
-<label>Balance change (+ add, − subtract)</label><br>
-<input id="amount" type="number" placeholder="Example: 500"><br>
-<button onclick="changeBalance()">Apply Balance Change</button>
-<button class="secondary" onclick="resetBalance()">Reset Demo</button>
-<p id="adminMessage"></p>
-</div>
-<div class="card">
-<h3>Result Mode</h3>
-<select id="mode">
-<option value="auto">Automatic Random</option>
-<option value="manual">Manual</option>
-</select><br>
-<select id="manualResult">
-<option value="0">0 · Violet</option>
-<option value="1">1 · Green</option>
-<option value="2">2 · Red</option>
-<option value="3">3 · Green</option>
-<option value="4">4 · Red</option>
-<option value="5">5 · Violet</option>
-<option value="6">6 · Red</option>
-<option value="7">7 · Green</option>
-<option value="8">8 · Red</option>
-<option value="9">9 · Green</option>
-</select>
-<p><small>Manual mode controls the next displayed demo result.</small></p>
-</div>
-</section>
+<section id="activity" class="page"><div class="card"><h2>📋 Activity</h2><div id="activityList"></div></div></section>
+<section id="promotion" class="page"><div class="card"><h2>🎁 Promotion</h2><p>একবারের Demo Bonus</p><div class="balance">+50 VC</div><button class="gold full" id="bonusBtn" onclick="claimBonus()">CLAIM BONUS</button><p class="notice">শুধু ভার্চুয়াল কয়েন।</p></div></section>
+<section id="wallet" class="page"><div class="card"><h2>👛 Virtual Wallet</h2><div class="small">বর্তমান ব্যালেন্স</div><div class="balance"><span id="walletBalance">1000</span> VC</div><h3>লেনদেনের ইতিহাস</h3><div id="walletHistory"></div><p class="notice">আসল টাকা জমা বা তোলার ব্যবস্থা নেই।</p></div></section>
+<section id="account" class="page"><div class="card"><h2>👤 Account</h2><p>Wingo Demo Player</p><p class="small">Account Type: Local Demo</p><p class="small">ব্যালেন্স এই ব্রাউজারে সংরক্ষিত থাকবে।</p><button class="dark full" onclick="resetDemo()">Reset Demo</button></div></section>
 </main>
-
-<nav>
-<button onclick="showPage('Home')">Home</button>
-<button onclick="showPage('Activity')">Activity</button>
-<button onclick="showPage('Promotion')">Promotion</button>
-<button onclick="showPage('Wallet')">Wallet</button>
-<button onclick="showPage('Account')">Account</button>
+<nav class="nav">
+<button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+<button data-page="activity" onclick="showPage('activity')"><span>▤</span>Activity</button>
+<button data-page="promotion" onclick="showPage('promotion')"><span>🎁</span>Promotion</button>
+<button data-page="wallet" onclick="showPage('wallet')"><span>◉</span>Wallet</button>
+<button data-page="account" onclick="showPage('account')"><span>☻</span>Account</button>
 </nav>
-
 <script>
-let balance=1000;
-let bonusClaimed=false;
-let logs=[];
+const $=id=>document.getElementById(id);
+const COLORS={Green:"#16bb7e",Red:"#f04d64",Violet:"#9257f5"};
+const freshState=()=>({balance:1000,round:10001,seconds:30,bonus:false,selection:null,pending:null,history:[],activity:[],wallet:[]});
+let state;
+try{state=Object.assign(freshState(),JSON.parse(localStorage.getItem("wingoDemoState")||"{}"))}catch(e){state=freshState()}
+state.balance=Math.max(0,Number(state.balance)||0);
+state.round=Math.max(10001,Number(state.round)||10001);
+state.seconds=30;
+state.history=Array.isArray(state.history)?state.history:[];
+state.activity=Array.isArray(state.activity)?state.activity:[];
+state.wallet=Array.isArray(state.wallet)?state.wallet:[];
+state.selection=null;state.pending=null;
 
-function showPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-window.scrollTo(0,0);
+function save(){
+ try{localStorage.setItem("wingoDemoState",JSON.stringify(state))}catch(e){}
+ render();
 }
-
-function render(){
-document.getElementById('balance').textContent=balance.toLocaleString();
-document.getElementById('walletBalance').textContent=balance.toLocaleString();
-document.getElementById('recent').innerHTML=logs.slice(-4).reverse().join('<br>')||'No activity yet';
-document.getElementById('history').innerHTML=logs.slice().reverse().join('<br>')||'No activity yet';
+function safeText(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function logActivity(message){state.activity.unshift({message,time:new Date().toLocaleTimeString()});state.activity=state.activity.slice(0,30)}
+function logWallet(message,amount){state.wallet.unshift({message,amount,time:new Date().toLocaleTimeString()});state.wallet=state.wallet.slice(0,30)}
+function showPage(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ window.scrollTo(0,0);
 }
-
-function log(message){
-logs.push(new Date().toLocaleTimeString()+' — '+message);
-render();
+function resultColor(n){if(n===0||n===5)return "Violet";return n%2===0?"Red":"Green"}
+function makeNumberButtons(){
+ const container=$("numbers");container.innerHTML="";
+ for(let n=0;n<=9;n++){
+  const b=document.createElement("button");b.className="num";b.textContent=n;
+  b.style.background=COLORS[resultColor(n)];
+  b.onclick=()=>choose("number",n);container.appendChild(b);
+ }
 }
-
+function choose(type,value){
+ if(state.pending){$("betStatus").textContent="এই রাউন্ডে ইতিমধ্যে Bet হয়েছে।";return}
+ if(state.seconds<=5){$("betStatus").textContent="পরের রাউন্ডে চেষ্টা করো।";return}
+ state.selection={type,value};
+ document.querySelectorAll("#numbers .num").forEach((b,i)=>b.classList.toggle("selected",type==="number"&&i===value));
+ $("selection").textContent=type==="number"?"নির্বাচন: Number "+value:"নির্বাচন: "+value;
+ document.querySelectorAll(".colorbtn").forEach(b=>b.style.outline=(type==="color"&&b.textContent.trim()===value.toUpperCase())?"2px solid white":"none");
+}
+function placeBet(){
+ if(state.pending){$("betStatus").textContent="এই রাউন্ডে Bet করা হয়ে গেছে।";return}
+ if(state.seconds<=5){$("betStatus").textContent="Bet বন্ধ। পরের রাউন্ডে চেষ্টা করো।";return}
+ if(!state.selection){$("betStatus").textContent="আগে নম্বর অথবা রং নির্বাচন করো।";return}
+ const amount=Number($("stake").value);
+ if(!Number.isSafeInteger(amount)||amount<1){$("betStatus").textContent="১ বা তার বেশি পূর্ণসংখ্যা দাও।";return}
+ if(amount>state.balance){$("betStatus").textContent="ভার্চুয়াল কয়েন যথেষ্ট নেই।";return}
+ state.balance-=amount;
+ state.pending={round:state.round,selection:{...state.selection},amount};
+ logActivity("Round "+state.round+": Bet "+amount+" VC");
+ logWallet("Bet placed",-amount);
+ $("betStatus").textContent=amount+" VC Bet হয়েছে। ফলাফলের জন্য অপেক্ষা করো।";
+ save();
+}
 function claimBonus(){
-if(bonusClaimed){
-alert('Demo bonus already claimed in this session.');
-return;
+ if(state.bonus)return;
+ state.bonus=true;state.balance+=50;
+ logActivity("50 VC Demo Bonus");logWallet("Demo bonus",50);save();
 }
-balance+=50;
-bonusClaimed=true;
-log('+50 virtual coins: demo bonus');
-alert('50 virtual coins added!');
+function renderHistory(id){
+ const el=$(id);
+ if(!state.history.length){el.innerHTML='<p class="small">এখনো কোনো ফলাফল নেই।</p>';return}
+ el.innerHTML=state.history.slice(0,10).map(h=>'<div class="history"><span>Round '+h.round+'</span><span><span class="dot" style="background:'+COLORS[h.color]+'">'+h.number+'</span> '+h.color+'</span><span>'+safeText(h.outcome||"Result")+'</span></div>').join("");
 }
-
-function changeBalance(){
-const name=document.getElementById('userName').value.trim();
-const amount=Number(document.getElementById('amount').value);
-if(!name){alert('Enter a demo user name.');return;}
-if(!Number.isFinite(amount)||amount===0){alert('Enter a non-zero amount.');return;}
-balance=Math.max(0,balance+amount);
-log(name+': balance changed by '+amount+' virtual coins');
-document.getElementById('adminMessage').textContent=
-'Demo balance updated for '+name+'. Current local balance: '+balance;
-render();
+function render(){
+ $("balance").textContent=state.balance;$("walletBalance").textContent=state.balance;
+ $("round").textContent=state.round;$("gameRound").textContent=state.round;
+ $("timer").textContent=state.seconds;$("gameTimer").textContent=state.seconds+"s";
+ $("bonusBtn").disabled=state.bonus;$("bonusBtn").textContent=state.bonus?"BONUS CLAIMED":"CLAIM BONUS";
+ $("betButton").disabled=!!state.pending;
+ const last=state.history[0];
+ $("lastResult").textContent=last?last.number+" — "+last.color:"এখনো নেই";
+ renderHistory("homeHistory");renderHistory("gameHistory");
+ $("activityList").innerHTML=state.activity.length?state.activity.map(a=>'<div class="history"><span>'+safeText(a.message)+'</span><span class="small">'+safeText(a.time)+'</span></div>').join(""):'<p class="small">এখনো কোনো Activity নেই।</p>';
+ $("walletHistory").innerHTML=state.wallet.length?state.wallet.map(w=>'<div class="history"><span>'+safeText(w.message)+'</span><span>'+(w.amount>0?"+":"")+w.amount+' VC</span></div>').join(""):'<p class="small">এখনো কোনো লেনদেন নেই।</p>';
 }
-
-function resetBalance(){
-if(!confirm('Reset this browser demo?'))return;
-balance=1000;bonusClaimed=false;logs=[];
-document.getElementById('result').textContent='Ready to play';
-document.getElementById('adminMessage').textContent='Demo reset.';
-render();
+function settleRound(){
+ const result=Math.floor(Math.random()*10);
+ const color=resultColor(result);let outcome="No Bet";
+ if(state.pending&&state.pending.round===state.round){
+  const bet=state.pending,s=bet.selection;
+  const won=s.type==="number"?result===s.value:color===s.value;
+  if(won){
+   const multiplier=s.type==="number"?9:(s.value==="Violet"?4.5:2);
+   const payout=bet.amount*multiplier;state.balance+=payout;
+   outcome="WIN +"+payout+" VC";
+   logWallet("Bet win — Round "+state.round,payout);
+   logActivity("Round "+state.round+": WIN +"+payout+" VC");
+  }else{
+   outcome="LOSE -"+bet.amount+" VC";
+   logActivity("Round "+state.round+": Bet lost");
+  }
+ }
+ state.history.unshift({round:state.round,number:result,color,outcome});
+ state.history=state.history.slice(0,30);
+ $("betStatus").textContent="Round "+state.round+" result: "+result+" ("+color+") — "+outcome;
+ state.round++;state.seconds=30;state.pending=null;state.selection=null;
+ $("selection").textContent="নতুন রাউন্ড: নির্বাচন করো";
+ document.querySelectorAll("#numbers .num").forEach(b=>b.classList.remove("selected"));
+ document.querySelectorAll(".colorbtn").forEach(b=>b.style.outline="none");
+ save();
 }
-
-function generateResult(){
-let n;
-if(document.getElementById('mode').value==='manual'){
-n=Number(document.getElementById('manualResult').value);
-}else{
-n=Math.floor(Math.random()*10);
+function resetDemo(){
+ if(!confirm("ব্যালেন্স ও হিস্ট্রি রিসেট করবে?"))return;
+ state=freshState();$("stake").value=10;
+ $("betStatus").textContent="Bet করার জন্য নির্বাচন করো.";
+ save();showPage("home");
 }
-let color=([0,5].includes(n))?'VIOLET':([1,3,7,9].includes(n))?'GREEN':'RED';
-document.getElementById('result').textContent='Number: '+n+' · '+color;
-log('Demo result: '+n+' · '+color);
-}
-
-render();
+makeNumberButtons();render();
+setInterval(()=>{
+ state.seconds--;
+ if(state.seconds<=0)settleRound();else render();
+},1000);
 </script>
 </body>
 </html>
