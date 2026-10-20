@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wingo Demo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101522;color:white;font-family:Arial}
+header{background:#202b42;padding:20px;text-align:center}
+h1{color:#42e6a4;margin:0}
+.balance{background:#202b42;margin:15px;padding:20px;border-radius:12px;text-align:center}
+.balance h2{color:#42e6a4}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#202b42;justify-content:space-around;padding:15px 2px}
+nav button{background:none;color:white;border:0;font-size:12px}
+main{padding:15px 15px 90px}
+.card{background:#202b42;padding:18px;margin:12px 0;border-radius:12px}
+button.action{background:#42e6a4;border:0;padding:12px;border-radius:8px;font-weight:bold}
+</style>
+</head>
+<body>
+<header><h1>WINGO DEMO</h1><p>Virtual Coins Only</p></header>
+<main>
+<div class="balance">
+<p>Demo Balance</p>
+<h2 id="coins">1000 Coins</h2>
+<button class="action" onclick="bonus()">Claim 50 Bonus</button>
+</div>
+<div class="card">
+<h3>Wingo Demo Result</h3>
+<p id="result">Ready to play</p>
+<button class="action" onclick="play()">Generate Demo Result</button>
+</div>
+<div class="card"><h3>Activity</h3><p>Demo activity will appear here.</p></div>
+<div class="card"><h3>Promotion</h3><p>Invite friends to explore the demo.</p></div>
+<div class="card"><h3>Wallet</h3><p>Virtual coins: <span id="wallet">1000</span></p></div>
+<div class="card"><h3>Account</h3><p>Wingo Demo Guest</p></div>
+</main>
+<nav>
+<button onclick="go('Home')">Home</button>
+<button onclick="go('Activity')">Activity</button>
+<button onclick="go('Promotion')">Promotion</button>
+<button onclick="go('Wallet')">Wallet</button>
+<button onclick="go('Account')">Account</button>
+</nav>
+<script>
+let coins=1000,claimed=false;
+function bonus(){
+if(claimed){alert('Bonus already claimed!');return}
+coins+=50;claimed=true;update();
+alert('50 virtual coins added!');
+}
+function update(){
+document.getElementById('coins').textContent=coins+' Coins';
+document.getElementById('wallet').textContent=coins;
+}
+function play(){
+let colors=['RED','GREEN','VIOLET'];
+let number=Math.floor(Math.random()*10);
+document.getElementById('result').textContent=
+'Number: '+number+' | '+colors[Math.floor(Math.random()*3)];
+}
+function go(name){
+if(name==='Home'){window.scrollTo(0,0);return}
+let cards=document.querySelectorAll('main .card');
+let index={Activity:0,Promotion:1,Wallet:2,Account:3}[name];
+cards[index].scrollIntoView({behavior:'smooth',block:'center'});
+}
+</script>
+</body>
+</html>
