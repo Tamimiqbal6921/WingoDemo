@@ -1,0 +1,10 @@
+{
+  "name": "wingodemo-functions",
+  "description": "Server-side virtual-only game logic for WingoDemo",
+  "main": "index.js",
+  "engines": { "node": "20" },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.1"
+  }
+}
